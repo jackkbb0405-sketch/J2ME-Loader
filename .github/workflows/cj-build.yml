@@ -1,0 +1,132 @@
+name: Build CJ APK
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/cj-build.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Apply CJ changes
+        run: |
+          base64 -d <<'B64' | gunzip > cj.patch
+          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
+          B64
+          patch -p1 --forward < cj.patch
+
+      - name: Make CJ icons
+        run: |
+          sudo apt-get install -y fonts-dejavu-core
+          pip install pillow
+          python3 - <<'PY'
+          from PIL import Image, ImageDraw, ImageFont
+          R = 'app/src/main/res/'
+          FP = '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf'
+          def draw(size, bg, safe):
+              im = Image.new('RGBA', (size, size), bg)
+              d = ImageDraw.Draw(im)
+              f = ImageFont.truetype(FP, int(size * safe))
+              b = d.textbbox((0, 0), 'CJ', font=f)
+              d.text(((size - (b[2] - b[0])) / 2 - b[0], (size - (b[3] - b[1])) / 2 - b[1]), 'CJ', font=f, fill=(255, 214, 140, 255))
+              return im
+          sizes = {'mdpi': (48, 108), 'hdpi': (72, 162), 'xhdpi': (96, 216), 'xxhdpi': (144, 324), 'xxxhdpi': (192, 432)}
+          for dens, (l, a) in sizes.items():
+              p = R + 'mipmap-' + dens + '/'
+              draw(l, (138, 43, 18, 255), .42).save(p + 'ic_launcher.png')
+              draw(a, (0, 0, 0, 0), .30).save(p + 'ic_launcher_foreground.png')
+          PY
+
+      - name: Accept Android licenses
+        run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null || true
+
+      - name: Build debug APK
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: CJ-apk
+          path: app/build/outputs/apk/debug/*.apk
